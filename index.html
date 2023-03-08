@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game List</title>
+  <meta name="author" content="Vasilis Pavlidis , Konstantinos Tsiropoulos">
+  <meta name="description" content="Welcome to our Display of our Favorite Movies">
+  <link rel="stylesheet" href="index.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Define an array to store the data
+      var data = [];
+
+      // Define a function to add an item to the list
+      function addItem(item) {
+        // Create a new item with the data
+        var newRow = $("<tr>")
+          .append($("<td>").text(item.name))
+          .append($("<td>").append($("<img>").attr("src", item.image)))
+          .append($("<td>").text(item.rating))
+          .append($("<td>").append($("<button>").text("Remove")));
+
+        // Add the item to the list
+        $("#data tbody").append(newRow);
+
+        // Add a click event listener to the "Remove" button
+        $("button", newRow).on("click", function () {
+          // Remove the item from the list
+          newRow.remove();
+
+          // Remove the item from the data array
+          var index = $(newRow).index();
+          data.splice(index, 1);
+        });
+      }
+
+      // Add event listener to the Add button
+      $("#add").on("click", function () {
+        // Get the values from the form
+        var name = $("#name").val();
+        var image = $("#image").val();
+        var rating = $("#rating").val();
+
+        // Create an object to store the data
+        var item = {
+          name: name,
+          image: image,
+          rating: rating
+        };
+
+        // Add the object to the data array
+        data.push(item);
+
+        // Add an item to the list
+        addItem(item);
+
+        var row = $('<tr></tr>');
+        var nameCell = $('<td></td>').text(item.name);
+        var imageCell = $('<td></td>').append($('<img>').attr('src', item.image));
+        var ratingCell = $('<td></td>').text(item.rating);
+        var actionCell = $('<td></td>').html('<button class="delete">Delete</button>');
+        row.append(nameCell, imageCell, ratingCell, actionCell);
+        $('#table tbody').append(row);
+
+        // Reset the form
+        $("#name").val("");
+        $("#image").val("");
+        $("#rating").val("1");
+      });
+
+      // Add event listener to the Sort button
+      $("#sort").on("click", function () {
+        // Sort the data array by rating
+        data.sort(function (a, b) {
+          return b.rating - a.rating;
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<header>
+  <img src="myBanner3.jpg" alt="Our Favorite Games" windth="728" height="550">
+</header>
+<div class="container">
+  <h2>Our Favorite Games: </h2>
+
+  <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name">
+    <label for="image">Image URL:</label>
+    <input type="text" id="image">
+    <label for="rating">Rating:</label>
+    <select id="rating">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <button type="button" id="add">Add</button>
+  </form>
+  <table id="data">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Image</th>
+      <th>Rating</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <button type="button" id="sort">Sort by Rating</button>
+</body>
+</html>
